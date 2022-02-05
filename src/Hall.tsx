@@ -1,10 +1,15 @@
-import React from "react";
+import React, { createContext } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
+
 import Seat from "./Seat";
 
+const HallContext = createContext({});
+
+export interface Ihall {}
 const Hall = () => {
   const [selectedSeats, setSelectedSeats] = useState<Array<string>>([]);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
 
   const hallStructure: any = {
     A: {
@@ -35,14 +40,23 @@ const Hall = () => {
   const unselectSeat = useCallback(
     (seatId) => {
       let seatIndex = selectedSeats.indexOf(seatId);
-      let tempArray = selectedSeats.splice(seatIndex, 1);
-      console.log(tempArray, "-----");
-      setSelectedSeats([...tempArray]);
+      selectedSeats.splice(seatIndex, 1);
+
+      setSelectedSeats(selectedSeats);
     },
     [selectedSeats]
   );
 
-  const calculateBill = () => {};
+  const calculateBill = () => {
+    let totalAmount = 0;
+
+    selectedSeats.forEach((seatId) => {
+      let copiedSeatId = seatId;
+      let row = copiedSeatId.replace(/\d/g, "");
+      totalAmount += hallStructure[row].price;
+    });
+    setTotalAmount(totalAmount);
+  };
 
   const bookSeats = () => {
     calculateBill();
@@ -52,28 +66,31 @@ const Hall = () => {
 
   return (
     <>
-      <div className="hall">
-        <div className="screen" />
-        {Object.keys(hallStructure).map((row: any) => (
-          <div className="row">
-            {hallStructure[row].seats.map((availability: any, index: any) =>
-              availability > -1 ? (
-                <Seat
-                  row={row}
-                  index={index}
-                  availability={availability}
-                  addSeat={(seatId: string) => addSeat(seatId)}
-                  unselectSeat={(seatId: string) => unselectSeat(seatId)}
-                />
-              ) : (
-                <div className="passage"></div>
-              )
-            )}
-          </div>
-        ))}
-      </div>
+      <HallContext.Provider value={{ hallStructure }}>
+        <div className="hall">
+          <div className="screen" />
+          {Object.keys(hallStructure).map((row: any) => (
+            <div className="row">
+              {hallStructure[row].seats.map((availability: any, index: any) =>
+                availability > -1 ? (
+                  <Seat
+                    row={row}
+                    index={index}
+                    availability={availability}
+                    addSeat={(seatId: string) => addSeat(seatId)}
+                    unselectSeat={(seatId: string) => unselectSeat(seatId)}
+                  />
+                ) : (
+                  <div className="passage"></div>
+                )
+              )}
+            </div>
+          ))}
+        </div>
 
-      <button onClick={bookSeats}>Proceed</button>
+        <button onClick={bookSeats}>Proceed</button>
+        {totalAmount}
+      </HallContext.Provider>
     </>
   );
 };

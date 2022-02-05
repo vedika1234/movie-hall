@@ -9,10 +9,10 @@ const Seat = ({ row, index, availability, addSeat, unselectSeat }: any) => {
 
   const selectSeat = (seatId: string) => {
     console.log(availability);
-    if (availability === 0) {
+    if (bookingStatus === 0) {
       setBookingStatus(2);
       addSeat(seatId);
-    } else if (availability === 2) {
+    } else if (bookingStatus === 2) {
       unselectSeat(seatId);
       setBookingStatus(0);
     }
