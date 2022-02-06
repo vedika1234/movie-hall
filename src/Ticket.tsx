@@ -39,8 +39,8 @@ const Ticket = ({ totalAmount, selectedSeats }: any) => {
             </tr>
             <tr>
               <td>₹{totalAmount}</td>
-              <td>1/13/17</td>
-              <td>19:30</td>
+              <td>2/13/22</td>
+              <td>7:30 PM</td>
             </tr>
           </table>
         </div>
