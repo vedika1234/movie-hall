@@ -1,9 +1,8 @@
-import React, { createContext } from "react";
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 
+import Billing from "./Billing";
 import Hall from "./Hall";
-
-// import logo from "./logo.svg";
 
 import "./App.css";
 
@@ -12,6 +11,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<Hall />} />
+        <Route path="billing" element={<Billing />} />
       </Routes>
     </div>
   );

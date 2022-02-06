@@ -1,15 +1,20 @@
 import React, { createContext } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
+import Billing from "./Billing";
 import Seat from "./Seat";
 
-const HallContext = createContext({});
+// export const HallContext = createContext<any>("");
 
 export interface Ihall {}
 const Hall = () => {
   const [selectedSeats, setSelectedSeats] = useState<Array<string>>([]);
   const [totalAmount, setTotalAmount] = useState<number>(0);
+
+  const [showBilling, setBilling] = useState(false);
+  const navigate = useNavigate();
 
   const hallStructure: any = {
     A: {
@@ -60,39 +65,46 @@ const Hall = () => {
 
   const bookSeats = () => {
     calculateBill();
+    // navigate("billing");
+    setBilling(true);
   };
 
   console.log(selectedSeats);
 
   return (
     <>
-      <HallContext.Provider value={{ hallStructure }}>
-        <div className="hall">
-          <div className="screen" />
-          {Object.keys(hallStructure).map((row: any) => (
-            <div className="row">
-              {hallStructure[row].seats.map((availability: any, index: any) =>
-                availability > -1 ? (
-                  <Seat
-                    row={row}
-                    index={index}
-                    availability={availability}
-                    addSeat={(seatId: string) => addSeat(seatId)}
-                    unselectSeat={(seatId: string) => unselectSeat(seatId)}
-                  />
-                ) : (
-                  <div className="passage"></div>
-                )
-              )}
-            </div>
-          ))}
-        </div>
+      {/* <HallContext.Provider value={selectedSeats}> */}
+      <div className="hall">
+        <div className="screen" />
+        {Object.keys(hallStructure).map((row: any) => (
+          <div className="row">
+            {hallStructure[row].seats.map((availability: any, index: any) =>
+              availability > -1 ? (
+                <Seat
+                  row={row}
+                  index={index}
+                  availability={availability}
+                  addSeat={(seatId: string) => addSeat(seatId)}
+                  unselectSeat={(seatId: string) => unselectSeat(seatId)}
+                />
+              ) : (
+                <div className="passage"></div>
+              )
+            )}
+          </div>
+        ))}
+      </div>
 
-        <button onClick={bookSeats}>Proceed</button>
-        {totalAmount}
-      </HallContext.Provider>
+      <button onClick={bookSeats}>Proceed</button>
+      {totalAmount}
+
+      {/* {showBilling && <Billing />} */}
+      {/* </HallContext.Provider> */}
     </>
   );
 };
 
 export default Hall;
+function useHistory() {
+  throw new Error("Function not implemented.");
+}
