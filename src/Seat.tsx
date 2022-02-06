@@ -4,11 +4,10 @@ import { useState } from "react";
 const seatAvailability = ["available", "booked", "selected"];
 
 const Seat = ({ row, index, availability, addSeat, unselectSeat }: any) => {
-  const seatId = row + index;
+  const seatId = `${row}:${index}`;
   const [bookingStatus, setBookingStatus] = useState(availability);
 
   const selectSeat = (seatId: string) => {
-    console.log(availability);
     if (bookingStatus === 0) {
       setBookingStatus(2);
       addSeat(seatId);
@@ -19,8 +18,8 @@ const Seat = ({ row, index, availability, addSeat, unselectSeat }: any) => {
   };
 
   useEffect(() => {
-    //
-  }, [bookingStatus]);
+    setBookingStatus(availability);
+  }, [availability]);
 
   return (
     <div

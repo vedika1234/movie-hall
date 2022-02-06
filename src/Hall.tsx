@@ -1,22 +1,20 @@
-import React, { createContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useCallback } from "react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Billing from "./Billing";
+import { HallContext } from "./App";
 import Seat from "./Seat";
 
-// export const HallContext = createContext<any>("");
-
-export interface Ihall {}
 const Hall = () => {
-  const [selectedSeats, setSelectedSeats] = useState<Array<string>>([]);
-  const [totalAmount, setTotalAmount] = useState<number>(0);
+  const { seatsData, billData, timerData } = useContext(HallContext);
 
-  const [showBilling, setBilling] = useState(false);
+  const [selectedSeats, setSelectedSeats] = seatsData;
+  const [totalAmount, setTotalAmount] = billData;
+  const [timer, setTimer] = timerData;
+
   const navigate = useNavigate();
 
-  const hallStructure: any = {
+  const [hallStructure, setHallstructure] = useState<any>({
     A: {
       seats: [0, 0, 0, 0, -1, 0, 0, 0, 0],
       price: 150,
@@ -33,7 +31,7 @@ const Hall = () => {
       seats: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       price: 250,
     },
-  };
+  });
 
   const addSeat = useCallback(
     (seatId) => {
@@ -55,29 +53,42 @@ const Hall = () => {
   const calculateBill = () => {
     let totalAmount = 0;
 
-    selectedSeats.forEach((seatId) => {
-      let copiedSeatId = seatId;
-      let row = copiedSeatId.replace(/\d/g, "");
-      totalAmount += hallStructure[row].price;
+    selectedSeats.forEach((seatId: any) => {
+      let seat = seatId.split(":");
+      totalAmount += hallStructure[seat[0]].price;
     });
     setTotalAmount(totalAmount);
   };
 
   const bookSeats = () => {
-    calculateBill();
-    // navigate("billing");
-    setBilling(true);
+    if (selectedSeats.length) {
+      calculateBill();
+      setTimer(new Date());
+      navigate("billing");
+    } else {
+      alert("We hope you want to watch the movie!");
+    }
   };
 
-  console.log(selectedSeats);
+  useEffect(() => {
+    let currentTime: any = new Date();
+    if (currentTime.getMinutes() - timer.getMinutes() <= 5) {
+      selectedSeats.forEach((seatId: string) => {
+        let { 0: row, 1: index } = seatId.split(":");
+        hallStructure[row].seats[index] = 2;
+      });
+      setHallstructure({ ...hallStructure });
+    } else {
+      setSelectedSeats([]);
+    }
+  }, [timer]);
 
   return (
     <>
-      {/* <HallContext.Provider value={selectedSeats}> */}
       <div className="hall">
         <div className="screen" />
         {Object.keys(hallStructure).map((row: any) => (
-          <div className="row">
+          <div className="row" key={row}>
             {hallStructure[row].seats.map((availability: any, index: any) =>
               availability > -1 ? (
                 <Seat
@@ -86,6 +97,7 @@ const Hall = () => {
                   availability={availability}
                   addSeat={(seatId: string) => addSeat(seatId)}
                   unselectSeat={(seatId: string) => unselectSeat(seatId)}
+                  key={row + index}
                 />
               ) : (
                 <div className="passage"></div>
@@ -97,9 +109,6 @@ const Hall = () => {
 
       <button onClick={bookSeats}>Proceed</button>
       {totalAmount}
-
-      {/* {showBilling && <Billing />} */}
-      {/* </HallContext.Provider> */}
     </>
   );
 };
