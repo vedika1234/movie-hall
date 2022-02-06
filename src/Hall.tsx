@@ -14,6 +14,10 @@ const Hall = () => {
 
   const navigate = useNavigate();
 
+  // Hall structure is a customizable object where key is the row name and the
+  // seats array will contain the seat status as per the avaialability
+  // Seats status : 0- available, -1 : passage, 1: booked, 2: selected by user
+  // each cinema hall can set-up their own seating arrangement and proce per row easily
   const [hallStructure, setHallstructure] = useState<any>({
     A: {
       seats: [0, 0, 0, 0, -1, 0, 0, 0, 0],
@@ -85,29 +89,36 @@ const Hall = () => {
 
   return (
     <div className="hall-screen">
-      <div className="hall">
-        <div className="screen" />
-        {Object.keys(hallStructure).map((row: any) => (
-          <div className="row" key={row}>
-            {hallStructure[row].seats.map((availability: any, index: any) =>
-              availability > -1 ? (
-                <Seat
-                  row={row}
-                  index={index}
-                  availability={availability}
-                  addSeat={(seatId: string) => addSeat(seatId)}
-                  unselectSeat={(seatId: string) => unselectSeat(seatId)}
-                  key={row + index}
-                />
-              ) : (
-                <div className="passage"></div>
-              )
-            )}
-          </div>
-        ))}
+      <div>
+        <div>
+          <img src="https://www.koimoi.com/wp-content/new-galleries/2021/10/red-notice-actors-dwayne-johnson-gal-gadot-ryan-reynolds-expected-salary-for-their-work-will-blow-your-mind-001.jpg" />
+        </div>
       </div>
+      <div>
+        <div className="hall">
+          <div className="screen" />
+          {Object.keys(hallStructure).map((row: any) => (
+            <div className="row" key={row}>
+              {hallStructure[row].seats.map((availability: any, index: any) =>
+                availability > -1 ? (
+                  <Seat
+                    row={row}
+                    index={index}
+                    availability={availability}
+                    addSeat={(seatId: string) => addSeat(seatId)}
+                    unselectSeat={(seatId: string) => unselectSeat(seatId)}
+                    key={row + index}
+                  />
+                ) : (
+                  <div className="passage"></div>
+                )
+              )}
+            </div>
+          ))}
+        </div>
 
-      <button onClick={bookSeats}>Proceed</button>
+        <button onClick={bookSeats}>Proceed</button>
+      </div>
     </div>
   );
 };

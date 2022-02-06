@@ -18,6 +18,7 @@ const Billing = () => {
 
   const confirmBill = () => {
     let currentTime: any = new Date();
+    // Timer to check if the current time has exceeded the session time
     if (currentTime.getMinutes() - timer.getMinutes() <= 5) {
       setShowTicket(true);
       alert("Meet you at the theater!");
@@ -37,6 +38,7 @@ const Billing = () => {
           <p>BOOKING SUMMARY</p>
           <table className="bill-table">
             <tr>
+              {/* More rows containing data regarding taxes and total can be added */}
               <td>Subtotal: </td>
               <td>₹{totalAmount}</td>
             </tr>

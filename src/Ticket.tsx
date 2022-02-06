@@ -10,6 +10,7 @@ const Ticket = ({ totalAmount, selectedSeats }: any) => {
           <p className="movie-title">RED NOTICE</p>
         </div>
         <div className="poster">
+          {/* movie data which is currently statis can be retirieved dynamically */}
           <img
             src="https://www.koimoi.com/wp-content/new-galleries/2021/10/red-notice-actors-dwayne-johnson-gal-gadot-ryan-reynolds-expected-salary-for-their-work-will-blow-your-mind-001.jpg"
             alt="Movie: Red Notice"

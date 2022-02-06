@@ -7,6 +7,8 @@ import Error from "./Error";
 
 import "./App.css";
 
+// Have used Context APi to maintain the global state of the app.
+//  Can be replaced with Redux or any other state management library as the app size increases
 export const HallContext = createContext<any>("");
 
 function App() {
