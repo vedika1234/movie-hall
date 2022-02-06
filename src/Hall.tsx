@@ -84,7 +84,7 @@ const Hall = () => {
   }, [timer]);
 
   return (
-    <>
+    <div className="hall-screen">
       <div className="hall">
         <div className="screen" />
         {Object.keys(hallStructure).map((row: any) => (
@@ -108,8 +108,7 @@ const Hall = () => {
       </div>
 
       <button onClick={bookSeats}>Proceed</button>
-      {totalAmount}
-    </>
+    </div>
   );
 };
 
